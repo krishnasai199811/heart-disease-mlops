@@ -33,10 +33,16 @@ def load_and_preprocess_data(data_path: str = "data/raw/heart_disease.csv"):
         raise FileNotFoundError(f"Dataset not found at {data_path}. Run data_loader.py first.")
 
     df = pd.read_csv(data_path)
-    # Binarize target: 0 = healthy, >0 = heart disease
-    df["target"] = (df["target"] > 0).astype(int)
 
-    X = df.drop(columns=["target"])
+    # UCI raw dataset uses 'num', processed versions often use 'target'
+    target_col = "target" if "target" in df.columns else "num"
+
+    # Binarize target: 0 = healthy, >0 = heart disease
+    df["target"] = (df[target_col] > 0).astype(int)
+
+    # Drop raw target columns if differing
+    cols_to_drop = [c for c in ["target", "num"] if c in df.columns]
+    X = df.drop(columns=cols_to_drop)
     y = df["target"]
     return X, y
 

@@ -31,6 +31,8 @@ jobs:
           flake8 src/ tests/ --count --max-line-length=127 --statistics
 
       - name: Run Data Acquisition & Model Training
+        env:
+          PYTHONPATH: src
         run: |
           python src/data_loader.py
           python src/train_lr.py
@@ -38,6 +40,8 @@ jobs:
           cp models/Logistic_Regression.joblib models/best_model.joblib
 
       - name: Run Pytest Test Suite
+        env:
+          PYTHONPATH: .
         run: |
           pytest -v --tb=short
 
