@@ -87,7 +87,12 @@ def main():
                 serialization_format="cloudpickle"
             )
 
-            print(f"[{model_name}] - Accuracy: {metrics['test_accuracy']:.4f} | Recall: {metrics['test_recall']:.4f} | F1: {metrics['test_f1']:.4f} | ROC-AUC: {metrics['test_roc_auc']:.4f}")
+            print(
+                f"[{model_name}] - Accuracy: {metrics['test_accuracy']:.4f} | "
+                f"Recall: {metrics['test_recall']:.4f} | "
+                f"F1: {metrics['test_f1']:.4f} | "
+                f"ROC-AUC: {metrics['test_roc_auc']:.4f}"
+            )
 
     # Automated selection
     best_model_name = max(results, key=lambda k: results[k][selection_metric])
@@ -96,8 +101,9 @@ def main():
 
     joblib.dump(best_pipeline, best_model_path)
 
+    best_score = results[best_model_name][selection_metric]
     print("=" * 60)
-    print(f"WINNER: '{best_model_name}' selected based on highest {selection_metric} ({results[best_model_name][selection_metric]:.4f})")
+    print(f"WINNER: '{best_model_name}' selected based on highest {selection_metric} ({best_score:.4f})")
     print(f"Automatically promoted to production artifact: {best_model_path}")
     print("=" * 60)
 
